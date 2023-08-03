@@ -15,22 +15,29 @@ collection = db_connection.get_collection("minhaCollection")
 minha_collection_repository = MinhaCollectionRepositoty(db_connection)
 
 
-filter = {"listaDesejos.modelo":"Dunk Low", "listaDesejos.precoDesejado":{"$lte":410} } #filtro and, tem q satisfazer os dois ao mesmo tempo
+# filter = {"listaDesejos.modelo":"Dunk Low", "listaDesejos.precoDesejado":{"$lte":410} } #filtro and, tem q satisfazer os dois ao mesmo tempo
 #filtro or no minhaCollection_repository (lte é menor ou igual)
 
+contacts = []
+data = collection.find({"listaDesejos": {"$elemMatch": {"modelo":'Dunk Low', "precoDesejado":{"$lte":575}}}})
+for element in data:
+    print(element)
+    contacts.append(int(element['user']))
+    
+print("Contatos",contacts)
 # filter = {"quantidade": {"$lte":500}}
 # returnOptions = {"_id":0, "user":1, "listaDesejos.categoria":1, "listaDesejos.modelo":1, "listaDesejos.precoDesejado":1} #retorna apenas os usuários, o id e a categoria
 
-returnOptions = {"_id":0, "user":1} #retorna apenas os usuários, o id e a categoria
+returnOptions = {"_id":0, "user":1, "listaDesejos.precoDesejado":1} #retorna apenas os usuários, o id e a categoria
 
 
 #CASO DO TCC
-responseContacts = minha_collection_repository.select_contact(filter,returnOptions)
+# responseContacts = minha_collection_repository.select_contact(filter,returnOptions)
 # print("Contatos\n", responseContacts)
 
 #BUSCA
-responseSelectMany = minha_collection_repository.select_many(filter, returnOptions)
-responseSelectOne = minha_collection_repository.select_one(filter, returnOptions)
+# responseSelectMany = minha_collection_repository.select_many(filter, returnOptions)
+# responseSelectOne = minha_collection_repository.select_one(filter, returnOptions)
 # minha_collection_repository.select_if_property_exists() #verifica se existe registro de acordo com aluma propriedade
 # minha_collection_repository.select_manyOrdered()
 
@@ -51,7 +58,7 @@ propriedade = {"Profissao": "Dev", "idade":22} #caso não exista o campo ele cri
 
 
 #DELETE
-minha_collection_repository.delete_registry()
+# minha_collection_repository.delete_registry()
 
 
 
